@@ -69,6 +69,6 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:${{ steps.tag.outputs.TAG }}
+            neatnode/trading-app-backend:latest
+            neatnode/trading-app-backend:${{ github.sha }}
+            neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
