@@ -53,6 +53,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to AWS ECR
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
       - name: Determine tag
         id: tag
         run: |
@@ -69,6 +73,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            neatnode/trading-app-backend:latest
-            neatnode/trading-app-backend:${{ github.sha }}
-            neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/neatnode/trading-app-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/neatnode/trading-app-backend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:${{ github.sha }}
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
