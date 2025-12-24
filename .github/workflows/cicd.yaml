@@ -56,7 +56,9 @@ jobs:
       - name: Log in to AWS ECR
         uses: aws-actions/amazon-ecr-login@v2
         with:
-          registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+          registries: ${{ secrets.AWS_ACCOUNT_ID }}
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
       - name: Determine tag
         id: tag
         run: |
