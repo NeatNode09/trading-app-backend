@@ -53,18 +53,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-     
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::536964175637:role/aws-service-role/replication.ecr.amazonaws.com/AWSServiceRoleForECRReplication
-          aws-region: ${{ secrets.AWS_REGION}}
-     
-      - name: Log in to AWS ECR
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Log in to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        with:
-          registries: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-    
     
       - name: Determine tag
         id: tag
@@ -85,6 +84,6 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/trading-app-backend:${{ steps.tag.outputs.TAG }}
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:latest
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:${{ github.sha }}
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
+            ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:latest
+            ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
