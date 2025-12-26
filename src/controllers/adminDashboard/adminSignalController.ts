@@ -19,12 +19,17 @@ export const createAnalysisPairHandler = async (
     } = req.body;
 
     // Validation
-    if (!category || typeof category !== "string") {
-      return res.status(400).json({ status: 400, message: "category is required" });
+    const allowedCategories = ["Crypto", "Forex"];
+    if (!allowedCategories.includes(category)) {
+      return res.status(400).json({
+        status: 400,
+        message: "category must be Crypto or Forex"
+      });
     }
 
+
     if (!symbol || typeof symbol !== "string") {
-      return res.status(400).json({ status: 400,message: "symbol is required" });
+      return res.status(400).json({ status: 400, message: "symbol is required" });
     }
 
     if (!description || typeof description !== "string") {
@@ -78,18 +83,16 @@ export const createAnalysisPairHandler = async (
     const analysis = result.rows[0];
 
     // Emit only active and not scheduled
-    if (!analysis.is_scheduled && analysis.status === "active") {
-      io?.emit("premium_chat", {
-        analysis_id: analysis.analysis_id,
-        symbol: analysis.symbol,
-        category: analysis.category,
-        graph_image_url: analysis.graph_image_url,
-        description: analysis.description,
-        status: analysis.status,
-        visibility: analysis.visibility,
-        created_at: analysis.created_at
-      });
-    }
+    io?.emit("premium_chat", {
+      analysis_id: analysis.analysis_id,
+      symbol: analysis.symbol,
+      category: analysis.category,
+      graph_image_url: analysis.graph_image_url,
+      description: analysis.description,
+      status: analysis.status,
+      visibility: analysis.visibility,
+      created_at: analysis.created_at
+    });
 
     return res.status(201).json({
       success: 201,
@@ -124,9 +127,9 @@ export const getAnalysisPairsByCategoryHandler = async (
       LIMIT $2 OFFSET $3
     `;
 
-    const { rows } = await pool.query(query, [category.trim() , limit, offset]);
+    const { rows } = await pool.query(query, [category.trim(), limit, offset]);
 
-    
+
 
     return res.status(200).json({
       success: 200,

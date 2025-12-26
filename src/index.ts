@@ -15,7 +15,7 @@ import adminDashboardRoute from "./routes/adminDashboardRoutes";
 import announcement from "./routes/announcementsRoutes";
 import subscriptionVerifyRoute from "./routes/subscriptionVerificationRoutes";
 import adminSubscriptionRoutes from "./routes/subscriptionRoutes";
-
+import resultRoutes from "./routes/ResultRoutes";
 
 dotenv.config();
 export const app = express();
@@ -32,6 +32,7 @@ app.use("/api", signalRoute);
 app.use("/api", userRoute);
 app.use("/api/admin/dashboard", adminDashboardRoute)
 app.use("/api/admin/dashboard", adminSubscriptionRoutes);
+app.use("/api/admin/dashboard", resultRoutes);
 app.use("/api", announcement);
 app.use("/api", subscriptionVerifyRoute);
 

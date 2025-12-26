@@ -7,6 +7,9 @@ export const pool = new Pool({
   database: env.pgDatabase,
   password: env.pgPassword,
   port: env.pgPort,
+  ssl: {
+    rejectUnauthorized: false, // REQUIRED for Neon
+  },
 });
 
 pool.connect()
