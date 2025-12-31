@@ -99,6 +99,6 @@ jobs:
 
       - name: Upload imagedefinitions.json to S3
         run: |
-          aws s3 cp imagedefinitions.json s3://tradingapp-codepipline-bucket/imagedefinitions.json
+          aws s3 cp imagedefinitions.json s3://tradingapp-codepipline-bucket/tradingApp-ecr-to-ec/imagedefinitions.json
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
