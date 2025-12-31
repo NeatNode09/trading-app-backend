@@ -87,18 +87,3 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:latest
             ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}
-
-      - name: Generate imagedefinitions.json
-        id: gen-image-def
-        run: |
-          IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/neatnode/trading-app-backend:${{ steps.tag.outputs.TAG }}"
-          echo "[{\"name\":\"backend\",\"imageUri\":\"$IMAGE_URI\"}]" > imagedefinitions.json
-          cat imagedefinitions.json
-
-      ## Upload image definitions to S3
-
-      - name: Upload imagedefinitions.json to S3
-        run: |
-          aws s3 cp imagedefinitions.json s3://tradingapp-codepipline-bucket/tradingApp-ecr-to-ec/imagedefinitions.json
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
